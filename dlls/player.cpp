@@ -1970,7 +1970,7 @@ void CBasePlayer::PreThink(void)
 
 	if ( !FBitSet ( pev->flags, FL_ONGROUND ) )
 	{
-		m_flFallVelocity = -pev->velocity.z;
+		m_flFallVelocity = pev->velocity.z;
 	}
 
 	// StudioFrameAdvance( );//!!!HACKHACK!!! Can't be hit by traceline when not animating?
