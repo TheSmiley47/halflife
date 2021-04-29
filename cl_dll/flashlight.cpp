@@ -55,14 +55,14 @@ void CHudFlashlight::Reset(void)
 
 int CHudFlashlight::VidInit(void)
 {
-	int HUD_flash_empty = gHUD.GetSpriteIndex( "flash_empty" );
+	int HUD_flash_empty = gHUD.GetSpriteIndex( "flash_full" );
 	int HUD_flash_full = gHUD.GetSpriteIndex( "flash_full" );
 	int HUD_flash_beam = gHUD.GetSpriteIndex( "flash_beam" );
 
-	m_hSprite1 = gHUD.GetSprite(HUD_flash_empty);
+	m_hSprite1 = gHUD.GetSprite(HUD_flash_full);
 	m_hSprite2 = gHUD.GetSprite(HUD_flash_full);
 	m_hBeam = gHUD.GetSprite(HUD_flash_beam);
-	m_prc1 = &gHUD.GetSpriteRect(HUD_flash_empty);
+	m_prc1 = &gHUD.GetSpriteRect(HUD_flash_full);
 	m_prc2 = &gHUD.GetSpriteRect(HUD_flash_full);
 	m_prcBeam = &gHUD.GetSpriteRect(HUD_flash_beam);
 	m_iWidth = m_prc2->right - m_prc2->left;
@@ -106,14 +106,16 @@ int CHudFlashlight::Draw(float flTime)
 		return 1;
 
 	if (m_fOn)
-		a = 225;
+		a = CVAR_GET_FLOAT("hud_alpha_flashlight");
 	else
-		a = MIN_ALPHA;
+		a = CVAR_GET_FLOAT("hud_alpha_flashlight");
 
 	if (m_flBat < 0.20)
-		UnpackRGB(r,g,b, RGB_REDISH);
+		//UnpackRGB(r,g,b, RGB_YELLOWISH);
+		GetHudColor(r,g,b);
 	else
-		UnpackRGB(r,g,b, RGB_YELLOWISH);
+		//UnpackRGB(r,g,b, RGB_YELLOWISH);
+		GetHudColor(r,g,b);
 
 	ScaleColors(r, g, b, a);
 

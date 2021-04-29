@@ -72,12 +72,12 @@ int WeaponsResource :: HasAmmo( WEAPON *p )
 
 void WeaponsResource :: LoadWeaponSprites( WEAPON *pWeapon )
 {
-	int i, iRes;
+	int i, iRes, hudres;
 
-	if (ScreenWidth < 640)
-		iRes = 320;
-	else
-		iRes = 640;
+	hudres = CVAR_GET_FLOAT("hud_sprite_resolution");
+	if (ScreenWidth < 640) iRes = 320;
+	else if (ScreenWidth < hudres) iRes = 640;
+	else iRes = hudres;
 
 	char sz[128];
 
@@ -862,12 +862,12 @@ int CHudAmmo::Draw(float flTime)
 
 	AmmoWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
 
-	a = (int) max( MIN_ALPHA, m_fFade );
+	a = CVAR_GET_FLOAT("hud_alpha_ammo");
 
 	if (m_fFade > 0)
 		m_fFade -= (gHUD.m_flTimeDelta * 20);
-
-	UnpackRGB(r,g,b, RGB_YELLOWISH);
+	GetHudColor(r,g,b);
+	//UnpackRGB(r,g,b, RGB_YELLOWISH);
 
 	ScaleColors(r, g, b, a );
 
@@ -895,8 +895,8 @@ int CHudAmmo::Draw(float flTime)
 			int iBarWidth =  AmmoWidth/10;
 
 			x += AmmoWidth/2;
-
-			UnpackRGB(r,g,b, RGB_YELLOWISH);
+			GetHudColor(r,g,b);
+			//UnpackRGB(r,g,b, RGB_YELLOWISH);
 
 			// draw the | bar
 			FillRGBA(x, y, iBarWidth, gHUD.m_iFontHeight, r, g, b, a);
@@ -968,8 +968,8 @@ int DrawBar(int x, int y, int width, int height, float f)
 		x += w;
 		width -= w;
 	}
-
-	UnpackRGB(r, g, b, RGB_YELLOWISH);
+	GetHudColor(r,g,b);
+	//UnpackRGB(r, g, b, RGB_YELLOWISH);
 
 	FillRGBA(x, y, width, height, r, g, b, 128);
 
@@ -1044,13 +1044,13 @@ int CHudAmmo::DrawWList(float flTime)
 	for ( i = 0; i < MAX_WEAPON_SLOTS; i++ )
 	{
 		int iWidth;
-
-		UnpackRGB(r,g,b, RGB_YELLOWISH);
+		GetHudColor(r,g,b);
+		//UnpackRGB(r,g,b, RGB_YELLOWISH);
 	
 		if ( iActiveSlot == i )
-			a = 255;
+			a = CVAR_GET_FLOAT("hud_alpha_ammo");
 		else
-			a = 192;
+			a = CVAR_GET_FLOAT("hud_alpha_ammo");
 
 		ScaleColors(r, g, b, 255);
 		SPR_Set(gHUD.GetSprite(m_HUD_bucket0 + i), r, g, b );
@@ -1073,7 +1073,7 @@ int CHudAmmo::DrawWList(float flTime)
 	}
 
 
-	a = 128; //!!!
+	a = CVAR_GET_FLOAT("hud_alpha_ammo"); //!!!
 	x = 10;
 
 	// Draw all of the buckets
@@ -1096,8 +1096,8 @@ int CHudAmmo::DrawWList(float flTime)
 
 				if ( !p || !p->iId )
 					continue;
-
-				UnpackRGB( r,g,b, RGB_YELLOWISH );
+				GetHudColor(r,g,b);
+				//UnpackRGB( r,g,b, RGB_YELLOWISH );
 			
 				// if active, then we must have ammo.
 
@@ -1138,8 +1138,8 @@ int CHudAmmo::DrawWList(float flTime)
 		else
 		{
 			// Draw Row of weapons.
-
-			UnpackRGB(r,g,b, RGB_YELLOWISH);
+			GetHudColor(r,g,b);
+			//UnpackRGB(r,g,b, RGB_YELLOWISH);
 
 			for ( int iPos = 0; iPos < MAX_WEAPON_POSITIONS; iPos++ )
 			{
@@ -1150,13 +1150,14 @@ int CHudAmmo::DrawWList(float flTime)
 
 				if ( gWR.HasAmmo(p) )
 				{
-					UnpackRGB(r,g,b, RGB_YELLOWISH);
-					a = 128;
+					GetHudColor(r,g,b);
+					//UnpackRGB(r,g,b, RGB_YELLOWISH);
+					a = CVAR_GET_FLOAT("hud_alpha_ammo");
 				}
 				else
 				{
 					UnpackRGB(r,g,b, RGB_REDISH);
-					a = 96;
+					a = CVAR_GET_FLOAT("hud_alpha_ammo");
 				}
 
 				FillRGBA( x, y, giBucketWidth, giBucketHeight, r, g, b, a );

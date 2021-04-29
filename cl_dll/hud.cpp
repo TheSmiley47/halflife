@@ -31,6 +31,8 @@
 #include "demo_api.h"
 #include "vgui_ScorePanel.h"
 
+cvar_t *hud_color;
+
 hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine
 extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];   // additional player info sent directly to the client dll
 
@@ -321,6 +323,11 @@ void CHud :: Init( void )
 
 	CVAR_CREATE( "hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );		// controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE( "hud_takesshots", "0", FCVAR_ARCHIVE );		// controls whether or not to automatically take screenshots at the end of a round
+	CVAR_CREATE( "hud_alpha_health", "255", FCVAR_ARCHIVE );
+	CVAR_CREATE( "hud_alpha_battery", "255", FCVAR_ARCHIVE );
+	CVAR_CREATE( "hud_alpha_flashlight", "255", FCVAR_ARCHIVE );
+	CVAR_CREATE( "hud_alpha_ammo", "255", FCVAR_ARCHIVE );
+	CVAR_CREATE( "hud_sprite_resolution", "640", FCVAR_ARCHIVE );
 
 
 	m_iLogo = 0;
@@ -331,6 +338,7 @@ void CHud :: Init( void )
 	m_pCvarStealMouse = CVAR_CREATE( "hud_capturemouse", "1", FCVAR_ARCHIVE );
 	m_pCvarDraw = CVAR_CREATE( "hud_draw", "1", FCVAR_ARCHIVE );
 	cl_lw = gEngfuncs.pfnGetCvarPointer( "cl_lw" );
+	hud_color = gEngfuncs.pfnRegisterVariable( "hud_color", "auto", FCVAR_ARCHIVE);
 
 	m_pSpriteList = NULL;
 
@@ -424,11 +432,12 @@ void CHud :: VidInit( void )
 	
 	m_hsprLogo = 0;	
 	m_hsprCursor = 0;
-
-	if (ScreenWidth < 640)
-		m_iRes = 320;
-	else
-		m_iRes = 640;
+	
+	int hudres;
+	hudres = CVAR_GET_FLOAT("hud_sprite_resolution");
+	if (ScreenWidth < 640) m_iRes = 320;
+	else if (ScreenWidth < hudres) m_iRes = 640;
+	else m_iRes = hudres;
 
 	// Only load this once
 	if ( !m_pSpriteList )

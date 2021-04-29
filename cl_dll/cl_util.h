@@ -186,6 +186,37 @@ extern vec3_t vec3_origin;
 // disable 'truncation from 'const double' to 'float' warning message
 #pragma warning( disable: 4305 )
 
+// YaLTeR code from Bunnymod Pro
+extern cvar_t *hud_color;
+inline void GetHudColor(int &r, int &g, int &b)
+{
+	if (hud_color->string && hud_color->string[0])
+	{
+		if ( strcmp(hud_color->string, "auto") )
+		{
+			sscanf(hud_color->string, "%i %i %i", &r, &g, &b);
+			if (r < 0) r = 0;
+            if (r > 255) r = 255;
+            if (g < 0) g = 0;
+            if (g > 255) g = 255;
+            if (b < 0) b = 0;
+            if (b > 255) b = 255;
+		}
+		else
+		{
+			r = 255;
+			g = 160;
+			b = 0;
+		}
+	}
+	else
+	{
+		r = 255;
+		g = 160;
+		b = 0;
+	}
+}
+
 inline void UnpackRGB(int &r, int &g, int &b, unsigned long ulRGB)\
 {\
 	r = (ulRGB & 0xFF0000) >>16;\

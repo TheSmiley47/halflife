@@ -156,7 +156,8 @@ void CHudHealth::GetPainColor( int &r, int &g, int &b )
 #else
 	if (m_iHealth > 25)
 	{
-		UnpackRGB(r,g,b, RGB_YELLOWISH);
+		GetHudColor(r,g,b);
+		//UnpackRGB(r,g,b, RGB_YELLOWISH);
 	}
 	else
 	{
@@ -182,24 +183,15 @@ int CHudHealth::Draw(float flTime)
 	// Has health changed? Flash the health #
 	if (m_fFade)
 	{
-		m_fFade -= (gHUD.m_flTimeDelta * 20);
-		if (m_fFade <= 0)
-		{
-			a = MIN_ALPHA;
-			m_fFade = 0;
-		}
-
-		// Fade the health number back to dim
-
-		a = MIN_ALPHA +  (m_fFade/FADE_TIME) * 128;
+		a = CVAR_GET_FLOAT("hud_alpha_health");
 
 	}
 	else
-		a = MIN_ALPHA;
+		a = CVAR_GET_FLOAT("hud_alpha_health");
 
 	// If health is getting low, make it bright red
 	if (m_iHealth <= 15)
-		a = 255;
+		a = CVAR_GET_FLOAT("hud_alpha_health");
 		
 	GetPainColor( r, g, b );
 	ScaleColors(r, g, b, a );
@@ -224,7 +216,7 @@ int CHudHealth::Draw(float flTime)
 
 		int iHeight = gHUD.m_iFontHeight;
 		int iWidth = HealthWidth/10;
-		FillRGBA(x, y, iWidth, iHeight, 255, 160, 0, a);
+		FillRGBA(x, y, iWidth, iHeight, r, g, b, a);
 	}
 
 	DrawDamage(flTime);
@@ -299,7 +291,7 @@ int CHudHealth::DrawPain(float flTime)
 	int x, y, a, shade;
 
 	// TODO:  get the shift value of the health
-	a = 255;	// max brightness until then
+	a = CVAR_GET_FLOAT("hud_alpha_health");	// max brightness until then
 
 	float fFade = gHUD.m_flTimeDelta * 2;
 	
@@ -371,8 +363,8 @@ int CHudHealth::DrawDamage(float flTime)
 
 	if (!m_bitsDamage)
 		return 1;
-
-	UnpackRGB(r,g,b, RGB_YELLOWISH);
+	GetHudColor(r,g,b);
+	//UnpackRGB(r,g,b, RGB_YELLOWISH);
 	
 	a = (int)( fabs(sin(flTime*2)) * 256.0);
 

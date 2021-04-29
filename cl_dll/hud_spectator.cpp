@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+//========= Copyright Â© 1996-2001, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -1557,7 +1557,8 @@ void CHudSpectator::DrawOverviewEntities()
 
 	z = m_OverviewData.layersHeights[0] * zScale;
 	// get yellow/brown HUD color
-	UnpackRGB(ir,ig,ib, RGB_YELLOWISH);
+	GetHudColor(ir,ig,ib);
+	//UnpackRGB(ir,ig,ib, RGB_YELLOWISH);
 	r = (float)ir/255.0f;
 	g = (float)ig/255.0f;
 	b = (float)ib/255.0f;
