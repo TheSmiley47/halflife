@@ -22,6 +22,7 @@
 #include "player.h"
 #include "soundent.h"
 #include "gamerules.h"
+#include "time.h"
 
 enum mp5_e
 {
@@ -127,6 +128,25 @@ BOOL CMP5::Deploy( )
 
 void CMP5::PrimaryAttack()
 {
+	if (m_iClip == 50 && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 250 && !bShooting)
+	{
+		timeShooting = clock();
+		bShooting = true;
+	}
+
+	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 && bShooting) 
+	{
+		double duration, durationS;
+		clock_t timeEnd = clock();
+
+		duration = (double)(timeEnd - timeShooting);
+		durationS = (double)(timeEnd - timeShooting) / CLOCKS_PER_SEC;
+
+		ALERT (at_console, "%f seconds (%f ticks) to shoot\n", durationS, duration);
+
+		bShooting = false;
+	}
+
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3)
 	{
@@ -259,6 +279,8 @@ void CMP5::Reload( void )
 
 void CMP5::WeaponIdle( void )
 {
+	bShooting = false;
+
 	ResetEmptySound( );
 
 	m_pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
@@ -366,21 +388,3 @@ class CMP5AmmoGrenade : public CBasePlayerAmmo
 };
 LINK_ENTITY_TO_CLASS( ammo_mp5grenades, CMP5AmmoGrenade );
 LINK_ENTITY_TO_CLASS( ammo_ARgrenades, CMP5AmmoGrenade );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
