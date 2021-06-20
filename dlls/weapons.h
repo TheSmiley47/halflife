@@ -16,6 +16,7 @@
 #define WEAPONS_H
 
 #include "effects.h"
+#include "time.h"
 
 class CBasePlayer;
 extern int gmsgWeapPickup;
