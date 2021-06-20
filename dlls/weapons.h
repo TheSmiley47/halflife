@@ -589,6 +589,9 @@ public:
 private:
 	unsigned short m_usMP5;
 	unsigned short m_usMP52;
+
+	clock_t timeShooting;
+	bool bShooting;
 };
 
 class CCrossbow : public CBasePlayerWeapon
