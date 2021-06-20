@@ -139,6 +139,7 @@ void CMP5::PrimaryAttack()
 	{
 		PlayEmptySound();
 		m_flNextPrimaryAttack = 0.15;
+		Reload();
 		return;
 	}
 
