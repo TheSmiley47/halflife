@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright Â© 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -121,6 +121,10 @@ public:
 	cvar_t			*m_pCvarDeveloper;
 	// Draw entities bone hit boxes, etc?
 	cvar_t			*m_pCvarDrawEntities;
+	// Disable viewmodel idle/fidget animations on viewmodels
+	cvar_t			*m_pCvarViewmodelNoIdle;
+	// Disable viewmodel draw/holster/deploy animations on viewmodels
+	cvar_t			*m_pCvarViewmodelNoEquip;
 
 	// The entity which we are currently rendering.
 	cl_entity_t		*m_pCurrentEntity;		
